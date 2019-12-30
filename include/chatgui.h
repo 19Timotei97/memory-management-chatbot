@@ -36,8 +36,8 @@ class ChatBotPanelDialog : public wxScrolledWindow {
   void render(wxDC &dc);
 
   // proprietary functions
-  void AddDialogItem(wxString text, bool isFromUser = true);
-  void PrintChatbotResponse(std::string response);
+  void AddDialogItem(const wxString& text, bool isFromUser = true);
+  void PrintChatbotResponse(const std::string& response);
 
   DECLARE_EVENT_TABLE()
 };

@@ -29,27 +29,30 @@ ChatBot::ChatBot(const std::string &filename) {
   _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
-ChatBot::ChatBot(ChatBot &chatbot) {
+ChatBot::ChatBot(ChatBot &source) {
   std::cout << "ChatBot Copy Constructor" << std::endl;
 
   // shallow copy of data handles
-  _chatLogic = chatbot._chatLogic;
-  _rootNode = chatbot._rootNode;
-  _image = chatbot._image;
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  _currentNode = source._currentNode;
+  _image = source._image;
 }
 
-ChatBot::ChatBot(ChatBot &&chatbot) {
+ChatBot::ChatBot(ChatBot &&source) {
   std::cout << "ChatBot Move Constructor" << std::endl;
 
   // transfering data handles
-  _chatLogic = chatbot._chatLogic;
-  _rootNode = chatbot._rootNode;
-  _image = chatbot._image;
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  _currentNode = source._currentNode;
+  _image = source._image;
 
   // releasing data handles
-  chatbot.SetChatLogicHandle(nullptr);
-  chatbot.SetRootNode(nullptr);
-  chatbot.SetCurrentNode(nullptr);
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._currentNode = nullptr;
+  source._image = nullptr;
 }
 
 ChatBot::~ChatBot() {
@@ -63,46 +66,43 @@ ChatBot::~ChatBot() {
   }
 }
 
-//// STUDENT CODE
-////
-
-ChatBot &ChatBot::operator=(ChatBot &chatbot) {
+ChatBot &ChatBot::operator=(ChatBot &source) {
   std::cout << "ChatBot Copy Assignment Operator" << std::endl;
 
-  if (this == &chatbot) {
+  if (this == &source) {
     return *this;
   }
 
   // shallow copy of data handles
-  _chatLogic = chatbot._chatLogic;
-  _rootNode = chatbot._rootNode;
-  _image = chatbot._image;
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  _currentNode = source._currentNode;
+  _image = source._image;
 
   return *this;
 }
 
-ChatBot &ChatBot::operator=(ChatBot &&chatbot) {
-  std::cout << "ChatBot Move Assignment Constructor" << std::endl;
+ChatBot &ChatBot::operator=(ChatBot &&source) {
+  std::cout << "ChatBot Move Assignment Operator" << std::endl;
 
-  if (this == &chatbot) {
+  if (this == &source) {
     return *this;
   }
 
   // transfering data handles
-  _chatLogic = chatbot._chatLogic;
-  _rootNode = chatbot._rootNode;
-  _image = chatbot._image;
+  _chatLogic = source._chatLogic;
+  _rootNode = source._rootNode;
+  _currentNode = source._currentNode;
+  _image = source._image;
 
   // releasing data handles
-  chatbot.SetChatLogicHandle(nullptr);
-  chatbot.SetRootNode(nullptr);
-  chatbot.SetCurrentNode(nullptr);
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._currentNode = nullptr;
+  source._image = nullptr;
 
   return *this;
 }
-
-////
-//// EOF STUDENT CODE
 
 void ChatBot::ReceiveMessageFromUser(const std::string &message) {
   // loop over all edges and keywords and compute Levenshtein distance to query
@@ -111,7 +111,7 @@ void ChatBot::ReceiveMessageFromUser(const std::string &message) {
 
   for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i) {
     GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
-    for (auto keyword : edge->GetKeywords()) {
+    for (const auto& keyword : edge->GetKeywords()) {
       EdgeDist ed{edge, ComputeLevenshteinDistance(keyword, message)};
       levDists.push_back(ed);
     }
@@ -119,7 +119,7 @@ void ChatBot::ReceiveMessageFromUser(const std::string &message) {
 
   // select best fitting edge to proceed along
   GraphNode *newNode;
-  if (levDists.size() > 0) {
+  if (!levDists.empty()) {
     // sort in ascending order of Levenshtein distance (best fit is at the top)
     std::sort(levDists.begin(), levDists.end(),
               [](const EdgeDist &a, const EdgeDist &b) {

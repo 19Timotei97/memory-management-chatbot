@@ -32,7 +32,7 @@ bool ChatBotApp::OnInit() {
 ChatBotFrame::ChatBotFrame(const wxString &title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height)) {
   // create panel with background image
-  ChatBotFrameImagePanel *ctrlPanel = new ChatBotFrameImagePanel(this);
+  auto *ctrlPanel = new ChatBotFrameImagePanel(this);
 
   // create controls and assign them to control panel
   _panelDialog = new ChatBotPanelDialog(ctrlPanel, wxID_ANY);
@@ -116,9 +116,6 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
   // allow for PNG images to be handled
   wxInitAllImageHandlers();
 
-  //// STUDENT CODE
-  ////
-
   // create chat logic instance
   _chatLogic = std::make_unique<ChatLogic>();
 
@@ -127,24 +124,14 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
 
   // load answer graph from file
   _chatLogic->LoadAnswerGraphFromFile(dataPath + "src/answergraph.txt");
-
-  ////
-  //// EOF STUDENT CODE
 }
 
-ChatBotPanelDialog::~ChatBotPanelDialog() {
-  //// STUDENT CODE
-  ////
-  ////
-  //// EOF STUDENT CODE
-}
+ChatBotPanelDialog::~ChatBotPanelDialog() {}
 
-void ChatBotPanelDialog::AddDialogItem(wxString text, bool isFromUser) {
+void ChatBotPanelDialog::AddDialogItem(const wxString& text, bool isFromUser) {
   // add a single dialog element to the sizer
-  ChatBotPanelDialogItem *item =
-      new ChatBotPanelDialogItem(this, text, isFromUser);
-  _dialogSizer->Add(item, 0,
-                    wxALL | (isFromUser ? wxALIGN_LEFT : wxALIGN_RIGHT), 8);
+  auto *item = new ChatBotPanelDialogItem(this, text, isFromUser);
+  _dialogSizer->Add(item, 0, wxALL | (isFromUser ? wxALIGN_LEFT : wxALIGN_RIGHT), 8);
   _dialogSizer->Layout();
 
   // make scrollbar show up
@@ -159,7 +146,7 @@ void ChatBotPanelDialog::AddDialogItem(wxString text, bool isFromUser) {
   this->DoScroll(0, sy);
 }
 
-void ChatBotPanelDialog::PrintChatbotResponse(std::string response) {
+void ChatBotPanelDialog::PrintChatbotResponse(const std::string& response) {
   // convert string into wxString and add dialog element
   wxString botText(response.c_str(), wxConvUTF8);
   AddDialogItem(botText, false);
@@ -180,22 +167,16 @@ void ChatBotPanelDialog::render(wxDC &dc) {
   image.LoadFile(imgBasePath + "sf_bridge_inner.jpg");
 
   wxSize sz = this->GetSize();
-  wxImage imgSmall =
-      image.Rescale(sz.GetWidth(), sz.GetHeight(), wxIMAGE_QUALITY_HIGH);
+  wxImage imgSmall = image.Rescale(sz.GetWidth(), sz.GetHeight(), wxIMAGE_QUALITY_HIGH);
 
   _image = wxBitmap(imgSmall);
   dc.DrawBitmap(_image, 0, 0, false);
 }
 
-ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent,
-                                               const wxString &text,
-                                               bool isFromUser)
+ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent, const wxString &text, bool isFromUser)
     : wxPanel(parent, -1, wxPoint(-1, -1), wxSize(-1, -1), wxBORDER_NONE) {
   // retrieve image from chatbot
-  wxBitmap *bitmap = isFromUser ? nullptr
-                                : ((ChatBotPanelDialog *)parent)
-                                      ->GetChatLogicHandle()
-                                      ->GetImageFromChatbot();
+  wxBitmap *bitmap = isFromUser ? nullptr : ((ChatBotPanelDialog *)parent)->GetChatLogicHandle()->GetImageFromChatbot();
 
   // create image and text
   _chatBotImg = new wxStaticBitmap(
@@ -204,10 +185,8 @@ ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent,
                   : *bitmap),
       wxPoint(-1, -1), wxSize(-1, -1));
   _chatBotTxt =
-      new wxStaticText(this, wxID_ANY, text, wxPoint(-1, -1), wxSize(150, -1),
-                       wxALIGN_CENTRE | wxBORDER_NONE);
-  _chatBotTxt->SetForegroundColour(isFromUser == true ? wxColor(*wxBLACK)
-                                                      : wxColor(*wxWHITE));
+      new wxStaticText(this, wxID_ANY, text, wxPoint(-1, -1), wxSize(150, -1), wxALIGN_CENTRE | wxBORDER_NONE);
+  _chatBotTxt->SetForegroundColour(isFromUser == true ? wxColor(*wxBLACK) : wxColor(*wxWHITE));
 
   // create sizer and add elements
   wxBoxSizer *horzBoxSizer = new wxBoxSizer(wxHORIZONTAL);

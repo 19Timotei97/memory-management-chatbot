@@ -25,15 +25,17 @@ class ChatBot {
   // constructors / destructors
   ChatBot();  // constructor WITHOUT memory allocation
   ChatBot(const std::string &filename);  // constructor WITH memory allocation
-  ChatBot(ChatBot &chatbot);             // copy constructor
-  ChatBot(ChatBot &&chatbot);            // move constructor
   ~ChatBot();
 
   //// STUDENT CODE
   ////
 
+  ChatBot(ChatBot &chatbot);             // copy constructor
+  ChatBot(ChatBot &&chatbot);            // move constructor
   ChatBot &operator=(ChatBot &chatbot);   // copy assignment constructor
   ChatBot &operator=(ChatBot &&chatbot);  // move assignment constructor
+
+  ChatLogic* GetChatLogicHandle() { return _chatLogic; }
 
   ////
   //// EOF STUDENT CODE
