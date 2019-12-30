@@ -3,10 +3,10 @@
 #include <algorithm>
 #include <ctime>
 
-#include "chatlogic.h"
-#include "graphnode.h"
-#include "graphedge.h"
-#include "chatbot.h"
+#include "../include/chatbot.h"
+#include "../include/chatlogic.h"
+#include "../include/graphedge.h"
+#include "../include/graphnode.h"
 
 // constructor WITHOUT memory allocation
 ChatBot::ChatBot()

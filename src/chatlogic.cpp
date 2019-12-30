@@ -6,11 +6,10 @@
 #include <tuple>
 #include <algorithm>
 
-#include "graphedge.h"
-#include "graphnode.h"
-#include "chatbot.h"
-#include "chatlogic.h"
-
+#include "../include/chatbot.h"
+#include "../include/chatlogic.h"
+#include "../include/graphedge.h"
+#include "../include/graphnode.h"
 
 ChatLogic::ChatLogic()
 {
@@ -31,9 +30,6 @@ ChatLogic::~ChatLogic()
 {
     //// STUDENT CODE
     ////
-
-    // delete chatbot instance
-    delete _chatBot;
 
     // delete all nodes
     for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
