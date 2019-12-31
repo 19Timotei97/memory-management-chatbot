@@ -2,8 +2,8 @@
 #define CHATGUI_H_
 
 #include <wx/wx.h>
-
 #include <iostream>
+#include <memory>
 
 class ChatLogic;  // forward declaration
 

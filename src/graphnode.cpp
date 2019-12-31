@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "../include/graphnode.h"
 #include "../include/graphedge.h"
