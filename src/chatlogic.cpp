@@ -12,14 +12,7 @@
 #include "../include/graphedge.h"
 #include "../include/graphnode.h"
 
-ChatLogic::ChatLogic() {
-  // create instance of chatbot
-  _chatBot = new ChatBot("../images/chatbot.png");
-
-  // add pointer to chatlogic so that chatbot answers can be passed on to the
-  // GUI
-  _chatBot->SetChatLogicHandle(this);
-}
+ChatLogic::ChatLogic() {}
 
 ChatLogic::~ChatLogic() {}
 
@@ -182,12 +175,14 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
     }
   }
 
-  // Create ChaBot local instance in stack
-  ChatBot chatBotInstance(std::move(*_chatBot));
-  chatBotInstance.SetChatLogicHandle(this);
-  chatBotInstance.SetRootNode(rootNode);
+  // create instance of chatbot
+  ChatBot chatBot("../images/chatbot.png");
 
-  rootNode->MoveChatbotHere(std::move(chatBotInstance));
+  chatBot.SetChatLogicHandle(this);
+  chatBot.SetChatLogicHandle(this);
+  chatBot.SetRootNode(rootNode);
+
+  rootNode->MoveChatbotHere(std::move(chatBot));
 }
 
 void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog *panelDialog) {
