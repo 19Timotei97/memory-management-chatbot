@@ -12,7 +12,10 @@
 #include "../include/graphedge.h"
 #include "../include/graphnode.h"
 
-ChatLogic::ChatLogic() {}
+ChatLogic::ChatLogic() {
+  _chatBot = new ChatBot("../images/chatbot.png");
+  _chatBot->SetChatLogicHandle(this);
+}
 
 ChatLogic::~ChatLogic() {}
 
@@ -176,11 +179,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
   }
 
   // create instance of chatbot
-  ChatBot chatBot("../images/chatbot.png");
+  ChatBot chatBot(std::move(*_chatBot));
 
-  chatBot.SetChatLogicHandle(this);
   chatBot.SetRootNode(rootNode);
-
   rootNode->MoveChatbotHere(std::move(chatBot));
 }
 
