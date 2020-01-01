@@ -29,7 +29,7 @@ ChatBot::ChatBot(const std::string &filename) {
   _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
-ChatBot::ChatBot(ChatBot &source) {
+ChatBot::ChatBot(ChatBot const& source) {
   std::cout << "ChatBot Copy Constructor" << std::endl;
 
   // shallow copy of data handles
@@ -39,7 +39,7 @@ ChatBot::ChatBot(ChatBot &source) {
   _image = source._image;
 }
 
-ChatBot::ChatBot(ChatBot &&source) {
+ChatBot::ChatBot(ChatBot&& source) noexcept {
   std::cout << "ChatBot Move Constructor" << std::endl;
 
   // transfering data handles
@@ -66,7 +66,7 @@ ChatBot::~ChatBot() {
   }
 }
 
-ChatBot &ChatBot::operator=(ChatBot &source) {
+ChatBot& ChatBot::operator=(ChatBot const& source) {
   std::cout << "ChatBot Copy Assignment Operator" << std::endl;
 
   if (this == &source) {
@@ -82,7 +82,7 @@ ChatBot &ChatBot::operator=(ChatBot &source) {
   return *this;
 }
 
-ChatBot &ChatBot::operator=(ChatBot &&source) {
+ChatBot& ChatBot::operator=(ChatBot&& source) noexcept {
   std::cout << "ChatBot Move Assignment Operator" << std::endl;
 
   if (this == &source) {

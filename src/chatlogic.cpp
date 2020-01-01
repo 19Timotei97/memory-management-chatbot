@@ -178,7 +178,10 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
     }
   }
 
-  // create instance of chatbot
+  // Create instance of chatbot on stack and then use the move constructor
+  // Note: chatbot instance can be removed from the constructor and
+  // instantiate a chatBot on stack in here then only use move semantics
+  // to pass the ownership to the root node in MoveChatBotHere.
   ChatBot chatBot(std::move(*_chatBot));
 
   chatBot.SetRootNode(rootNode);
