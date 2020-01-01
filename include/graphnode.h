@@ -24,10 +24,17 @@ class GraphNode {
   int _id;
   std::vector<std::string> _answers;
 
+  // non-copyable class
+  GraphNode(GraphNode const& source);
+  GraphNode& operator=(GraphNode const& source);
+
  public:
   // constructor / destructor
   GraphNode(int id);
   ~GraphNode();
+  GraphNode(GraphNode && source) noexcept;
+
+  GraphNode& operator=(GraphNode&& source) noexcept;
 
   // getter / setter
   int GetID() { return _id; }

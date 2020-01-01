@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <exception>
 
 #include "../include/graphnode.h"
 #include "../include/graphedge.h"
@@ -8,6 +9,36 @@
 GraphNode::GraphNode(int id) { _id = id; }
 
 GraphNode::~GraphNode() {}
+
+GraphNode::GraphNode(GraphNode&& source) noexcept {
+  _chatBot = source._chatBot;
+  _childEdges = std::move(source._childEdges);
+  _parentEdges = std::move(source._parentEdges);
+  _id = source._id;
+  _answers = std::move(source._answers);
+
+  // release handles
+  source._id = -1;
+}
+
+GraphNode& GraphNode::operator=(GraphNode&& source) noexcept {
+  if (this == &source) {
+    return *this;
+  }
+
+  _chatBot = source._chatBot;
+  _childEdges = std::move(source._childEdges);
+  _parentEdges = std::move(source._parentEdges);
+  _id = source._id;
+  _answers = std::move(source._answers);
+
+  // release handles;
+  source._id = -1;
+
+  return *this;
+}
+
+
 
 void GraphNode::AddToken(const std::string& token) { _answers.push_back(token); }
 

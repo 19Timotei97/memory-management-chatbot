@@ -14,18 +14,19 @@ class ChatBotPanelDialog : public wxScrolledWindow {
   wxBoxSizer *_dialogSizer;
   wxBitmap _image;
 
-  //// STUDENT CODE
-  ////
-
   std::unique_ptr<ChatLogic> _chatLogic;
 
-  ////
-  //// EOF STUDENT CODE
+  // non-copyable class
+  ChatBotPanelDialog(ChatBotPanelDialog const& source);
+  ChatBotPanelDialog& operator=(ChatBotPanelDialog const& source);
 
  public:
   // constructor / destructor
   ChatBotPanelDialog(wxWindow *parent, wxWindowID id);
   ~ChatBotPanelDialog();
+
+  ChatBotPanelDialog(ChatBotPanelDialog&& source) noexcept;
+  ChatBotPanelDialog& operator=(ChatBotPanelDialog&& source) noexcept;
 
   // getter / setter
   ChatLogic *GetChatLogicHandle() { return _chatLogic.get(); }
@@ -53,6 +54,11 @@ class ChatBotPanelDialogItem : public wxPanel {
   // constructor / destructor
   ChatBotPanelDialogItem(wxPanel *parent, const wxString &text,
                          bool isFromUser);
+
+  ChatBotPanelDialogItem(ChatBotPanelDialogItem const& source);
+  ChatBotPanelDialogItem& operator=(ChatBotPanelDialogItem const& source);
+  ChatBotPanelDialogItem(ChatBotPanelDialogItem&& source) noexcept;
+  ChatBotPanelDialogItem& operator=(ChatBotPanelDialogItem&& source) noexcept;
 };
 
 // frame containing all control elements
@@ -68,6 +74,11 @@ class ChatBotFrame : public wxFrame {
  public:
   // constructor / desctructor
   ChatBotFrame(const wxString &title);
+
+  ChatBotFrame(ChatBotFrame const& source);
+  ChatBotFrame& operator=(ChatBotFrame const& source);
+  ChatBotFrame(ChatBotFrame&& source) noexcept;
+  ChatBotFrame& operator=(ChatBotFrame&& source) noexcept;
 };
 
 // control panel for background image display
@@ -85,6 +96,11 @@ class ChatBotFrameImagePanel : public wxPanel {
   void render(wxDC &dc);
 
   DECLARE_EVENT_TABLE()
+
+  ChatBotFrameImagePanel(ChatBotFrameImagePanel const& source);
+  ChatBotFrameImagePanel& operator=(ChatBotFrameImagePanel const& source);
+  ChatBotFrameImagePanel(ChatBotFrameImagePanel&& source) noexcept;
+  ChatBotFrameImagePanel& operator=(ChatBotFrameImagePanel&& source) noexcept;
 };
 
 // wxWidgets app that hides main()

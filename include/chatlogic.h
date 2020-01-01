@@ -13,14 +13,9 @@ class GraphNode;
 
 class ChatLogic {
  private:
-  //// STUDENT CODE
-  ////
 
   // data handles (owned)
   std::vector<std::unique_ptr<GraphNode>> _nodes;
-
-  ////
-  //// EOF STUDENT CODE
 
   // data handles (not owned)
   GraphNode *_currentNode;
@@ -30,24 +25,30 @@ class ChatLogic {
   // proprietary type definitions
   typedef std::vector<std::pair<std::string, std::string>> tokenlist;
 
+  // non-copyable class
+  ChatLogic(ChatLogic const& source);
+  ChatLogic& operator=(ChatLogic const& source);
+
   // proprietary functions
   template <typename T>
-  void AddAllTokensToElement(std::string tokenID, tokenlist &tokens,
+  void AddAllTokensToElement(const std::string& tokenID, tokenlist &tokens,
                              T &element);
 
  public:
   // constructor / destructor
   ChatLogic();
   ~ChatLogic();
+  ChatLogic(ChatLogic && source) noexcept;
+  ChatLogic& operator=(ChatLogic&& source) noexcept;
 
   // getter / setter
   void SetPanelDialogHandle(ChatBotPanelDialog *panelDialog);
   void SetChatbotHandle(ChatBot *chatbot);
 
   // proprietary functions
-  void LoadAnswerGraphFromFile(std::string filename);
-  void SendMessageToChatbot(std::string message);
-  void SendMessageToUser(std::string message);
+  void LoadAnswerGraphFromFile(const std::string& filename);
+  void SendMessageToChatbot(const std::string& message);
+  void SendMessageToUser(const std::string& message);
   wxBitmap *GetImageFromChatbot();
 };
 

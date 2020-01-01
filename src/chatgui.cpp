@@ -56,6 +56,45 @@ ChatBotFrame::ChatBotFrame(const wxString &title)
   this->Centre();
 }
 
+ChatBotFrame::ChatBotFrame(ChatBotFrame const&
+source) {
+  _panelDialog = source._panelDialog;
+  _userTextCtrl = source._userTextCtrl;
+}
+
+ChatBotFrame& ChatBotFrame::operator=(ChatBotFrame const& source) {
+  if (this == &source) {
+    return *this;
+  }
+
+  _panelDialog = source._panelDialog;
+  _userTextCtrl = source._userTextCtrl;
+
+  return *this;
+}
+
+ChatBotFrame::ChatBotFrame(ChatBotFrame&& source) noexcept {
+  _panelDialog = source._panelDialog;
+  _userTextCtrl = source._userTextCtrl;
+
+  source._panelDialog = nullptr;
+  source._userTextCtrl = nullptr;
+}
+
+ChatBotFrame& ChatBotFrame::operator=(ChatBotFrame&& source) noexcept {
+  if (this == &source) {
+    return *this;
+  }
+
+  _panelDialog = source._panelDialog;
+  _userTextCtrl = source._userTextCtrl;
+
+  source._panelDialog = nullptr;
+  source._userTextCtrl = nullptr;
+
+  return *this;
+}
+
 void ChatBotFrame::OnEnter(wxCommandEvent &WXUNUSED(event)) {
   // retrieve text from text control
   wxString userText = _userTextCtrl->GetLineText(0);
@@ -75,8 +114,39 @@ BEGIN_EVENT_TABLE(ChatBotFrameImagePanel, wxPanel)
 EVT_PAINT(ChatBotFrameImagePanel::paintEvent)  // catch paint events
 END_EVENT_TABLE()
 
-ChatBotFrameImagePanel::ChatBotFrameImagePanel(wxFrame *parent)
-    : wxPanel(parent) {}
+ChatBotFrameImagePanel::ChatBotFrameImagePanel(wxFrame *parent) : wxPanel(parent) {}
+
+ChatBotFrameImagePanel::ChatBotFrameImagePanel(ChatBotFrameImagePanel const& source) {
+  _image = source._image;
+}
+
+ChatBotFrameImagePanel& ChatBotFrameImagePanel::operator=(ChatBotFrameImagePanel const& source) {
+  if (this == &source) {
+    return *this;
+  }
+
+  _image = source._image;
+
+  return *this;
+}
+
+ChatBotFrameImagePanel::ChatBotFrameImagePanel(ChatBotFrameImagePanel&& source) noexcept {
+  _image = source._image;
+
+  source._image = wxBitmap();
+}
+
+ChatBotFrameImagePanel& ChatBotFrameImagePanel::operator=(ChatBotFrameImagePanel&& source) noexcept {
+  if (this == &source) {
+    return *this;
+  }
+
+  _image = source._image;
+
+  source._image = wxBitmap();
+
+  return *this;
+}
 
 void ChatBotFrameImagePanel::paintEvent(wxPaintEvent &evt) {
   wxPaintDC dc(this);
@@ -127,6 +197,30 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
 }
 
 ChatBotPanelDialog::~ChatBotPanelDialog() {}
+
+ChatBotPanelDialog::ChatBotPanelDialog(ChatBotPanelDialog&& source) noexcept  {
+  _dialogSizer = source._dialogSizer;
+  _image = source._image;
+  _chatLogic = std::move(source._chatLogic);
+
+  source._dialogSizer = nullptr;
+  source._image = wxBitmap();
+}
+
+ChatBotPanelDialog& ChatBotPanelDialog::operator=(ChatBotPanelDialog&& source) noexcept  {
+  if (this == &source) {
+    return *this;
+  }
+
+  _dialogSizer = source._dialogSizer;
+  _image = source._image;
+  _chatLogic = std::move(source._chatLogic);
+
+  source._dialogSizer = nullptr;
+  source._image = wxBitmap();
+
+  return *this;
+}
 
 void ChatBotPanelDialog::AddDialogItem(const wxString& text, bool isFromUser) {
   // add a single dialog element to the sizer
@@ -199,4 +293,43 @@ ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent, const wxString &
 
   // set background color
   this->SetBackgroundColour((isFromUser == true ? wxT("YELLOW") : wxT("BLUE")));
+}
+
+ChatBotPanelDialogItem::ChatBotPanelDialogItem(ChatBotPanelDialogItem const&
+source) {
+  _chatBotImg = source._chatBotImg;
+  _chatBotTxt = source._chatBotTxt;
+}
+
+ChatBotPanelDialogItem& ChatBotPanelDialogItem::operator=(ChatBotPanelDialogItem const& source) {
+  if (this == &source) {
+    return *this;
+  }
+
+  _chatBotImg = source._chatBotImg;
+  _chatBotTxt = source._chatBotTxt;
+
+  return *this;
+}
+
+ChatBotPanelDialogItem::ChatBotPanelDialogItem(ChatBotPanelDialogItem&& source) noexcept {
+  _chatBotImg = source._chatBotImg;
+  _chatBotTxt = source._chatBotTxt;
+
+  source._chatBotImg = nullptr;
+  source._chatBotTxt = nullptr;
+}
+
+ChatBotPanelDialogItem& ChatBotPanelDialogItem::operator=(ChatBotPanelDialogItem&& source) noexcept {
+  if (this == &source) {
+    return *this;
+  }
+
+  _chatBotImg = source._chatBotImg;
+  _chatBotTxt = source._chatBotTxt;
+
+  source._chatBotImg = nullptr;
+  source._chatBotTxt = nullptr;
+
+  return *this;
 }

@@ -14,12 +14,18 @@ class GraphEdge {
 
   // proprietary members
   int _id;
-  std::vector<std::string>
-      _keywords;  // list of topics associated with this edge
+  std::vector<std::string> _keywords;  // list of topics associated with this
+  // edge
 
  public:
   // constructor / desctructor
   GraphEdge(int id);
+  GraphEdge(GraphEdge &source);                       // copy constructor
+  GraphEdge(GraphEdge &&source) noexcept;            // move constructor
+  GraphEdge& operator=(GraphEdge const& source);      // copy assignment
+  // constructor
+  GraphEdge& operator=(GraphEdge&& source) noexcept;  // move assignment
+  // constructor
 
   // getter / setter
   int GetID() { return _id; }

@@ -19,8 +19,36 @@ ChatLogic::ChatLogic() {
 
 ChatLogic::~ChatLogic() {}
 
+ChatLogic::ChatLogic(ChatLogic&& source) noexcept {
+  _currentNode = source._currentNode;
+  _panelDialog = source._panelDialog;
+  _chatBot = source._chatBot;
+  _nodes = std::move(source._nodes);
+
+  _currentNode = nullptr;
+  _panelDialog = nullptr;
+  _chatBot = nullptr;
+}
+
+ChatLogic& ChatLogic::operator=(ChatLogic && source) noexcept {
+  if (this == &source) {
+    return *this;
+  }
+
+  _currentNode = source._currentNode;
+  _panelDialog = source._panelDialog;
+  _chatBot = source._chatBot;
+  _nodes = std::move(source._nodes);
+
+  _currentNode = nullptr;
+  _panelDialog = nullptr;
+  _chatBot = nullptr;
+
+  return *this;
+}
+
 template <typename T>
-void ChatLogic::AddAllTokensToElement(std::string tokenID, tokenlist &tokens,
+void ChatLogic::AddAllTokensToElement(const std::string& tokenID, tokenlist &tokens,
                                       T &element) {
   // find all occurences for current node
   auto token = tokens.begin();
@@ -40,7 +68,7 @@ void ChatLogic::AddAllTokensToElement(std::string tokenID, tokenlist &tokens,
   }
 }
 
-void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
+void ChatLogic::LoadAnswerGraphFromFile(const std::string& filename) {
   // load file with answer graph elements
   std::ifstream file(filename);
 
@@ -194,11 +222,11 @@ void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog *panelDialog) {
 
 void ChatLogic::SetChatbotHandle(ChatBot *chatbot) { _chatBot = chatbot; }
 
-void ChatLogic::SendMessageToChatbot(std::string message) {
+void ChatLogic::SendMessageToChatbot(const std::string& message) {
   _chatBot->ReceiveMessageFromUser(message);
 }
 
-void ChatLogic::SendMessageToUser(std::string message) {
+void ChatLogic::SendMessageToUser(const std::string& message) {
   _panelDialog->PrintChatbotResponse(message);
 }
 
